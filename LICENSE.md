@@ -1,2 +1,2 @@
 
-Copyright (C) 2016 jack0088
+Copyright (C) 2016 herrsch.de
