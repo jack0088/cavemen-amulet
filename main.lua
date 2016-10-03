@@ -1,3 +1,5 @@
+require"animations"
+
 local window = am.window{
     width = 576,
     height = 576,
@@ -6,20 +8,25 @@ local window = am.window{
     clear_color = vec4(0, 0, 0, 1)
 }
 
-function test(t)
-    local node = am.translate(64, 64) ^ am.text("t", vec4(1, 1, 1, 1))
-    node:action(function()
-        t.n = t.n + 1
-        t.k = t.k*2
-        print(t.n, t.k)
-    end)
-    return node, t
-end
+local player = {
+    texture = "assets/cavemen_spritesheet.png",
+    x = 0,
+    x = 0,
+    width = 32,
+    height = 32,
+    frame_width = 8,
+    frame_height = 8,
+    animations = {
+        show_people = {vec2(7, 1), vec2(8, 1), vec2(9, 1), vec2(7, 2)},
+        show_monsters = {vec2(8, 2), vec2(7, 3) vec2(8, 3), vec2(9, 3)}
+    }
+    current_animation = "show_people",
+    fps = 6
+}
 
-local numbers = {n = 0, k = -1}
+local test_scene = am.group{
+    am.rect(0, 0, 128, 128, vec4(.1, .12, .14, 1)),
+    am.sprite_animation(player)
+}
 
-window.scene = am.rect(0, 0, 128, 128, vec4(.1, .12, .14, 1)) ^ test(numbers)
-
-window.scene:action(function()
-    --numbers.k = 0
-end)
+window.scene = test_scene
