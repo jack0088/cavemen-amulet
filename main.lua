@@ -21,7 +21,7 @@ local player = {
         show_monsters = {vec2(8, 2), vec2(7, 3), vec2(8, 3), vec2(9, 3)}
     },
     current_animation = "show_people",
-    fps = 6
+    fps = 3
 }
 
 local test_scene = am.group{

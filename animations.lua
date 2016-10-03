@@ -9,15 +9,19 @@ function am.sprite_animation(object)
     local function update_uv()
         local cols = texture_image.width / object.frame_width
         local rows = texture_image.height / object.frame_height
-        object.s2 = 1 / cols -- right
-        object.t2 = 1 / rows -- top
-        object.s1 = object.s2 * object.animations[object.current_animation][object.current_frame].x -- left
-        object.t1 = object.t2 * object.animations[object.current_animation][object.current_frame].y -- bottom
+        local w = 1 / cols
+        local h = 1 / rows
+        local u = w * (object.animations[object.current_animation][object.current_frame].x - 1)
+        local v = h * (rows - object.animations[object.current_animation][object.current_frame].y)
+        object.s1 = u -- left
+        object.t1 = v -- bottom
+        object.s2 = u + w -- right
+        object.t2 = v + h -- top
     end
 
     update_uv()
 
-    local node = am.translate(object.x, object.y)
+    local node = am.translate(object.x + object.width/2, object.y + object.height/2)
         ^ am.sprite{
             texture = am.texture2d(texture_image),
             s1 = object.s1, -- left
@@ -26,8 +30,8 @@ function am.sprite_animation(object)
             t2 = object.t2, -- top
             x1 = 0, -- left offset
             y1 = 0, -- bottom offset
-            x2 = 0, -- right offset
-            y2 = 0, -- top offset
+            x2 = object.width, -- right offset
+            y2 = object.height, -- top offset
             width = object.width,
             height = object.height
         }
@@ -37,11 +41,14 @@ function am.sprite_animation(object)
         or object.animation_time <= am.current_time()
         then
             object.animation_time = am.current_time() + 1 / object.fps
-            local next_frame = object.animations[object.current_animation][object.current_frame + 1]
+            update_uv()
 
-            if next_frame then
-                update_uv()
-                object.current_frame = next_frame
+            -- print(object.s1, object.t1, object.s2, object.t2)
+
+            if object.animations[object.current_animation][object.current_frame + 1] then
+                object.current_frame = object.current_frame + 1
+            else
+                object.current_frame = 1
             end
         end
     end)
