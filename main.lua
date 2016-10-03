@@ -16,10 +16,10 @@ function test(t)
     return node, t
 end
 
-local foo, bar = test({n = 0, k = 1})
+local numbers = {n = 0, k = -1}
 
-window.scene = am.rect(0, 0, 128, 128, vec4(.1, .12, .14, 1)) ^ foo
+window.scene = am.rect(0, 0, 128, 128, vec4(.1, .12, .14, 1)) ^ test(numbers)
 
 window.scene:action(function()
-    bar.k = 0
+    --numbers.k = 0
 end)
