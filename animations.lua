@@ -1,33 +1,25 @@
 function am.sprite_animation(object)
+    object.texture = am.read_image(object.texture)
     object.width = object.width or object.frame_width
     object.height = object.height or object.frame_height
     object.current_frame = 1
     object.fps = object.fps or 24
 
-    local image = am.read_image(object.texture)
-
-    self.atlas:setRectTex(self.mask,
-        1 / self.cols * (self.frames[i].x - 1),
-        (1 / self.rows * (self.rows - self.frames[i].y)),
-        1/self.cols,
-        1/self.rows)
-
-    local function get_uv()
-        local cols = image.width / object.frame_width
-        local rows = image.height / object.frame_height
-        local u = 1 / cols * object.animations[object.current_animation].x
-        local v = 1 / rows * object.animations[object.current_animation].y
-        local w = 1 / cols
-        local h = 1 / rows
-        return u, v, w, h
+    local function update_uv()
+        local cols = object.texture.width / object.frame_width
+        local rows = object.texture.height / object.frame_height
+        object.s2 = 1 / cols -- right
+        object.t2 = 1 / rows -- top
+        object.s1 = object.s2 * object.animations[object.current_animation].x -- left
+        object.t1 = object.t2 * object.animations[object.current_animation].y -- bottom
     end
 
     local node = am.sprite{
-        texture = image,
-        s1 = object._u, -- left
-        t1 = object._v, -- bottom
-        s2 = object._w, -- right
-        t2 = object._h, -- top
+        texture = object.texture,
+        s1 = object.s1, -- left
+        t1 = object.t1, -- bottom
+        s2 = object.s2, -- right
+        t2 = object.t2, -- top
         x1 = 0, -- left offset
         y1 = 0, -- bottom offset
         x2 = 0, -- right offset
@@ -44,7 +36,7 @@ function am.sprite_animation(object)
             local next_frame = object.frames[current_frame + 1]
 
             if next_frame then
-
+                update_uv()
                 object.current_frame = next_frame
             end
         end
