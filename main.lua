@@ -11,15 +11,15 @@ local window = am.window{
 local player = {
     texture = "assets/cavemen_spritesheet.png",
     x = 0,
-    x = 0,
+    y = 0,
     width = 32,
     height = 32,
     frame_width = 8,
     frame_height = 8,
     animations = {
         show_people = {vec2(7, 1), vec2(8, 1), vec2(9, 1), vec2(7, 2)},
-        show_monsters = {vec2(8, 2), vec2(7, 3) vec2(8, 3), vec2(9, 3)}
-    }
+        show_monsters = {vec2(8, 2), vec2(7, 3), vec2(8, 3), vec2(9, 3)}
+    },
     current_animation = "show_people",
     fps = 6
 }
