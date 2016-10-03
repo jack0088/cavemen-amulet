@@ -1,2 +1,2 @@
 
-Copyright (C) 2016 herrsch.de
+copyright (c) 2016 herrsch.de

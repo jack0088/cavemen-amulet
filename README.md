@@ -1,3 +1,4 @@
-# smuggler
+# smugglers
 
-Your are a people smuggler. Fill up a boat as good as you can.
+is a stupid tetris-like game prototype.
+Imagine that you're a people smuggler - fill up a boat as good as you can.
