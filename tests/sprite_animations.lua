@@ -1,55 +1,50 @@
-function am.sprite_animation(object)
+function sprite_animation(object)
     object.width = object.width or object.frame_width
     object.height = object.height or object.frame_height
     object.current_frame = 1
     object.fps = object.fps or 24
-
-    local texture_image = am.texture2d(object.texture)
-
-    local function update_uv()
-        local cols = texture_image.width / object.frame_width
-        local rows = texture_image.height / object.frame_height
-        local w = 1 / cols
-        local h = 1 / rows
-        local u = w * (object.animations[object.current_animation][object.current_frame].x - 1)
-        local v = h * (rows - object.animations[object.current_animation][object.current_frame].y)
-        object.s1 = u -- left
-        object.t1 = v -- bottom
-        object.s2 = u + w -- right
-        object.t2 = v + h -- top
-    end
-
-    update_uv()
+    object.src = {
+        texture = am.texture2d(object.texture),
+        s1 = 0, -- left
+        t1 = 0, -- bottom
+        s2 = 1, -- right
+        t2 = 1, -- top
+        x1 = 0, -- left offset
+        y1 = 0, -- bottom offset
+        x2 = object.width, -- right offset
+        y2 = object.height, -- top offset
+        width = object.width,
+        height = object.height
+    }
+    object.sprite = am.sprite(object.src)
 
     local node = am.translate(object.x + object.width/2, object.y + object.height/2)
-        ^ am.sprite{
-            texture = texture_image,
-            s1 = object.s1, -- left
-            t1 = object.t1, -- bottom
-            s2 = object.s2, -- right
-            t2 = object.t2, -- top
-            x1 = 0, -- left offset
-            y1 = 0, -- bottom offset
-            x2 = object.width, -- right offset
-            y2 = object.height, -- top offset
-            width = object.width,
-            height = object.height
-        }
+        ^ object.sprite
+        :action(function()
+            if not object.animation_time
+            or object.animation_time <= am.current_time()
+            then
+                local cols = object.src.texture.width / object.frame_width
+                local rows = object.src.texture.height / object.frame_height
+                local w = 1 / cols
+                local h = 1 / rows
+                local u = w * (object.animations[object.current_animation][object.current_frame].x - 1)
+                local v = h * (rows - object.animations[object.current_animation][object.current_frame].y)
 
-    node:action(function()
-        if not object.animation_time
-        or object.animation_time <= am.current_time()
-        then
-            object.animation_time = am.current_time() + 1 / object.fps
-            update_uv()
+                object.src.s1 = u -- left
+                object.src.t1 = v -- bottom
+                object.src.s2 = u + w -- right
+                object.src.t2 = v + h -- top
+                object.sprite.source = object.src -- important!
+                object.animation_time = am.current_time() + 1 / object.fps
 
-            if object.animations[object.current_animation][object.current_frame + 1] then
-                object.current_frame = object.current_frame + 1
-            else
-                object.current_frame = 1
+                if object.animations[object.current_animation][object.current_frame + 1] then
+                    object.current_frame = object.current_frame + 1
+                else
+                    object.current_frame = 1
+                end
             end
-        end
-    end)
+        end)
 
     node:tag"sprite_animation"
 
@@ -81,7 +76,7 @@ local sprite = {
 
 local scene = am.group{
     am.rect(0, 0, 128, 128, vec4(.1, .12, .14, 1)),
-    am.sprite_animation(sprite)
+    sprite_animation(sprite)
 }
 
 window.scene = scene

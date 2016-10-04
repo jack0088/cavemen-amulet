@@ -1,9 +1,8 @@
-function am.sprite_animation(object)
+function sprite_animation(object)
     object.width = object.width or object.frame_width
     object.height = object.height or object.frame_height
     object.verts = {object.x, object.y, object.x + object.width, object.y + object.height}
     object.uv = {0, 0, 1, 1}
-    object.texture_image = am.texture2d(object.texture)
     object.color = object.color or vec4(1)
     object.current_frame = 1
     object.fps = object.fps or 24
@@ -13,7 +12,7 @@ function am.sprite_animation(object)
         ^ am.bind{
             vert = am.rect_verts_2d(unpack(object.verts)),
             uv = am.rect_verts_2d(unpack(object.uv)),
-            tex = object.texture_image,
+            tex = am.texture2d(object.texture),
             color = object.color
         }
         ^ am.draw("triangles", am.rect_indices())
@@ -28,8 +27,10 @@ function am.sprite_animation(object)
             local h = 1 / rows
             local u = w * (object.animations[object.current_animation][object.current_frame].x - 1)
             local v = h * (rows - object.animations[object.current_animation][object.current_frame].y)
-            object.uv = {u, v, w, h}
+
             object.animation_time = am.current_time() + 1 / object.fps
+            object.uv = {u, v, w, h}
+            node"bind".uv = am.rect_verts_2d(unpack(object.uv))
 
             if object.animations[object.current_animation][object.current_frame + 1] then
                 object.current_frame = object.current_frame + 1
@@ -69,12 +70,12 @@ local sprite = {
 
 local scene = am.group{
     am.rect(0, 0, 128, 128, vec4(.1, .12, .14, 1)),
-    am.sprite_animation(sprite)
+    sprite_animation(sprite)
 }
 
 window.scene = scene
 
-window.scene:action(function()
-    print("updated player.x =", sprite.x)
+window.scene:action(function(node)
+    --print("updated player.x =", sprite.x)
     sprite.x = sprite.x + am.frame_time
 end)
