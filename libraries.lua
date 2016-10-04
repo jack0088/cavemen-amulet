@@ -1,4 +1,6 @@
--- Pack all modules in custom namespaces
+-- Pack modules in custom namespaces
 return {
-    sprite = require("animations")
+    print = require("lib.printf"),
+    concat_tables = require("lib.table_modifiers"),
+    sprite = require("lib.animations")
 }

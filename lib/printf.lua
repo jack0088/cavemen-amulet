@@ -1,4 +1,6 @@
-function printf(t, indent)
+-- Pretty print a table
+
+return function(t, indent)
     local names = {}
     indent = indent or ""
 
@@ -16,7 +18,7 @@ function printf(t, indent)
                 print(indent..tostring(n)..": <-")
             else
                 print(indent..tostring(n)..":")
-                dump(v, indent.."   ")
+                printf(v, indent.."   ")
             end
         else
             if type(v) == "function" then
