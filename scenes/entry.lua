@@ -28,6 +28,7 @@ return am.group{
 }
 :action(function()
     anim.angle = anim.angle + 1
+    --anim.pivot = vec2(math.random(), math.random())
     --anim.color = vec4(math.random(), math.random(), math.random(), math.random())
     --print(anim.angle)
 end)

@@ -22,13 +22,11 @@ return function(properties)
     properties.fps = properties.fps or 24
     properties.loop = properties.loop or true
 
-    print(properties.pivot * properties.frame_size)
-
     local node = am.group{
         am.translate(properties.position)
         ^ am.scale(properties.size)
         ^ am.rotate(math.rad(properties.angle))
-        ^ am.translate(-(properties.pivot * properties.size / properties.size)):tag("pivot")
+        ^ am.translate(-properties.pivot * properties.size / properties.size):tag("pivot")
         ^ am.use_program(am.shaders.texturecolor2d)
         ^ am.blend("alpha")
         ^ am.bind{
@@ -80,7 +78,7 @@ return function(properties)
     end
 
     function node:get_pivot()
-        return self("pivot").position2d
+        return properties.pivot
     end
 
     function node:get_current_animation()
@@ -114,7 +112,9 @@ return function(properties)
     end
 
     function node:set_pivot(pivot)
-        self("pivot").position2d = pivot
+        local scale = self("scale").scale2d
+        properties.pivot = pivot
+        self("pivot").position2d = -properties.pivot * scale / scale
     end
 
     function node:set_current_animation(name)
