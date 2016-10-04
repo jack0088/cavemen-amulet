@@ -2,10 +2,10 @@ local herrsch = require("libraries")
 
 local anim = herrsch.sprite{
     texture = "assets/cavemen_spritesheet.png",
-    x = 1,
-    y = 0,
-    width = 64,
-    height = 64,
+    x = 64,
+    y = 64,
+    width = 48,
+    height = 48,
     frame_width = 8,
     frame_height = 8,
     animations = {

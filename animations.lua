@@ -5,6 +5,7 @@
 -- y (number)
 -- width (number)
 -- height (number)
+-- angle (number)
 -- frame_width (number)
 -- frame_height (number)
 -- animations (table)
