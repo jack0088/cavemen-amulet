@@ -16,6 +16,7 @@
 return function(properties)
     properties.width = properties.width or properties.frame_width
     properties.height = properties.height or properties.frame_height
+    properties.angle = properties.angle or 0
     properties.color = properties.color or vec4(1)
     properties.current_frame = 1
     properties.fps = properties.fps or 24
@@ -23,6 +24,7 @@ return function(properties)
     local node = am.group{
         am.translate(properties.x, properties.y)
         ^ am.scale(properties.width, properties.height)
+        ^ am.rotate(math.rad(properties.angle))
         ^ am.use_program(am.shaders.texturecolor2d)
         ^ am.blend("alpha")
         ^ am.bind{
@@ -63,6 +65,7 @@ return function(properties)
     function node:get_y() return properties.y end
     function node:get_width() return properties.width end
     function node:get_height() return properties.height end
+    function node:get_angle() return self("rotate").angle end
     function node:get_current_animation() return properties.current_animation end
     function node:get_fps() return properties.fps end
     function node:get_color() return self("bind").color end
@@ -80,6 +83,11 @@ return function(properties)
     function node:set_height(height)
         properties.height = height
         self("scale").scale2d = vec2(properties.width, properties.height)
+    end
+
+    function node:set_angle(deg)
+        properties.angle = deg
+        self("rotate").angle = math.rad(properties.angle)
     end
 
     function node:set_current_animation(name)
