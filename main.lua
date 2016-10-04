@@ -7,9 +7,9 @@ local window = am.window{
     clear_color = vec4(0, 0, 0, 1)
 }
 
-local sprite = {
+local animated_sprite = animation{
     texture = "assets/cavemen_spritesheet.png",
-    x = 0,
+    x = 1,
     y = 0,
     width = 64,
     height = 64,
@@ -25,7 +25,12 @@ local sprite = {
 
 local scene = am.group{
     am.rect(0, 0, 128, 128, vec4(.1, .12, .14, 1)),
-    animation(sprite)
+    animated_sprite
 }
 
 window.scene = scene
+
+window.scene:action(function()
+    animated_sprite.x = animated_sprite.x + am.frame_time
+    animated_sprite.y = animated_sprite.y + am.frame_time
+end)
