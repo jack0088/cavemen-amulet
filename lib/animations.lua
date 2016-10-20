@@ -1,3 +1,7 @@
+-- Make sure that each frame on the spritesheet
+-- has extended borders >=1px around it to prevent bleeding and cracks!
+--
+--
 -- propierties (table) are:
 --
 -- texture (string or image buffer)
@@ -15,20 +19,21 @@
 
 return function(properties)
     properties.color = properties.color or vec4(1)
+    properties.position = properties.position or vec2(0, 0)
     properties.size = properties.size or properties.frame_size
     properties.angle = properties.angle or 0
     properties.pivot = properties.pivot or vec2(0, 0)
     properties.current_frame = 1
     properties.fps = properties.fps or 24
-    properties.loop = properties.loop or true
+    properties.loop = type(properties.loop) == "nil" and true or properties.loop
 
     local node = am.group{
         am.translate(properties.position)
         ^ am.scale(properties.size)
         ^ am.rotate(math.rad(properties.angle))
-        ^ am.translate(-properties.pivot * properties.size / properties.size):tag("pivot")
-        ^ am.use_program(am.shaders.texturecolor2d)
-        ^ am.blend("alpha")
+        ^ am.translate(-properties.pivot):tag("pivot")
+        ^ am.use_program(am.shaders.premult_texturecolor2d)
+        ^ am.blend("premult")
         ^ am.bind{
             vert = am.rect_verts_2d(0, 0, 1, 1),
             uv = am.rect_verts_2d(0, 0, 1, 1),
@@ -54,7 +59,7 @@ return function(properties)
             properties.current_frame = anim[frm + 1] and frm + 1 or 1
 
             if frm == #anim and not properties.loop then
-                properties.current_frame = frm
+                properties.current_frame = frm -- pull back
             end
         end
     end)
@@ -112,9 +117,8 @@ return function(properties)
     end
 
     function node:set_pivot(pivot)
-        local scale = self("scale").scale2d
         properties.pivot = pivot
-        self("pivot").position2d = -properties.pivot * scale / scale
+        self("pivot").position2d = -pivot
     end
 
     function node:set_current_animation(name)

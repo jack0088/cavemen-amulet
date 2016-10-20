@@ -1,6 +1,5 @@
--- Concat recursevly all values from given tables
-
 return {
+    -- Concat recursevly all values from given tables
     concat = function(...)
         local dump = {}
 
