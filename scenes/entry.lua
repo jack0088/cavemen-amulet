@@ -21,7 +21,7 @@ local anim = herrsch.sprite{
     },
     current_animation = "show_monsters",
     fps = 3,
-    loop = true
+    -- loop = true
 }
 
 return am.group{
