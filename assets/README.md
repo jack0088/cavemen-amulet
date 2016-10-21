@@ -1,1 +1,1 @@
-Assets required for the game and the files inside the "tests/" folder.
+assets required for the game
