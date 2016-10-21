@@ -8,20 +8,20 @@ local monsters = {vec2(8, 2), vec2(7, 3), vec2(8, 3), vec2(9, 3)}
 local anim = herrsch.sprite{
     texture = spritesheet,
     color = vec4(1),
-    --position = vec2(64, 64),
-    size = vec2(16, 16),
+    -- position = vec2(64, 64),
+    -- size = vec2(16, 16),
     frame_size = vec2(8, 8),
     angle = 0,
-    pivot = vec2(0, .5),
+    -- pivot = vec2(0, .5),
     animations = {
         default = still,
         show_people = people,
         show_monsters = monsters,
-        showcase_all = herrsch.table.concat(people, monsters) -- sequence example
+        showcase_all = herrsch.table.merge(people, monsters) -- sequence example
     },
     current_animation = "show_monsters",
     fps = 3,
-    -- loop = true
+    -- loop = false
 }
 
 return am.group{

@@ -1,6 +1,6 @@
 return {
     -- Concat recursevly all values from given tables
-    concat = function(...)
+    merge = function(...)
         local dump = {}
 
         local function copy(from, to)
